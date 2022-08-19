@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 
 const _0 = '0deg';
 const _90 = '90deg';
@@ -237,7 +237,7 @@ const tileOrientations: { [name: string]: Orientation} = {
   },
   yx_yx_y_y: {
     img: 'y-y-yx-yx.jpg',
-    rotation: _90
+    rotation: _180
   },
   y_yx_yx_y: {
     img: 'y-y-yx-yx.jpg',
@@ -253,9 +253,15 @@ const tileOrientations: { [name: string]: Orientation} = {
   },
 }
 
-export default function useOrientation(tileString: string) {
-  const [imageURL] = useState<string>(tileOrientations[tileString].img);
-  const [rotation] = useState<string>(tileOrientations[tileString].rotation);
+export default function useOrientation(tileString: string): [string, string] {
+
+  const [imageURL, setImageURL] = useState<string>(tileOrientations[tileString].img);
+  const [rotation, setRotation] = useState<string>(tileOrientations[tileString].rotation);
+
+  useEffect(() => {
+    setImageURL(tileOrientations[tileString].img);
+    setRotation(tileOrientations[tileString].rotation);
+  }, [tileString])
 
   return [imageURL, rotation];
 }
