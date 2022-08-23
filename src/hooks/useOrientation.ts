@@ -10,7 +10,15 @@ interface Orientation {
   rotation: string
 }
 
-const tileOrientations: { [name: string]: Orientation} = {
+const tileOrientations: {[name: string]: Orientation} = {
+  empty: {
+    img: 'empty.png',
+    rotation: _0
+  },
+  empty_empty_empty_empty: {
+    img: 'empty.png',
+    rotation: _0
+  },
   b_b_b_b: {
     img: 'b-b-b-b.jpg',
     rotation: _0
@@ -255,12 +263,12 @@ const tileOrientations: { [name: string]: Orientation} = {
 
 export default function useOrientation(tileString: string): [string, string] {
 
-  const [imageURL, setImageURL] = useState<string>(tileOrientations[tileString].img);
-  const [rotation, setRotation] = useState<string>(tileOrientations[tileString].rotation);
-
+  const [imageURL, setImageURL] = useState<string>('none');
+  const [rotation, setRotation] = useState<string>('none');
+  
   useEffect(() => {
-    setImageURL(tileOrientations[tileString].img);
-    setRotation(tileOrientations[tileString].rotation);
+      setImageURL(tileOrientations[tileString].img);
+      setRotation(tileOrientations[tileString].rotation);   
   }, [tileString])
 
   return [imageURL, rotation];

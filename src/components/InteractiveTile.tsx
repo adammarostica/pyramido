@@ -5,13 +5,12 @@ interface TileProps {
   squares: string,
   row: number,
   column: number,
-  gridRow: number,
-  gridColumn: number
 }
 
-const ColoredTile = styled.div<{ image: string, rotate: string, gridColumn: number, gridRow: number }>`
+const ColoredTile = styled.div<{ image: string, rotate: string, gridColumn: number, gridRow: number}>`
   width: 100%;
   height: auto;
+  aspect-ratio: 1 / 1;
   ${ props => `background-image: url("./tiles/${props.image}");
       background-repeat: no-repeat;
       background-position: center;
@@ -22,11 +21,9 @@ const ColoredTile = styled.div<{ image: string, rotate: string, gridColumn: numb
   }}
 `;
 
-export default function Tile({squares, row, column, gridRow, gridColumn}: TileProps): JSX.Element {
- 
+export default function InteractiveTile({squares, row, column}: TileProps): JSX.Element {
   const [imageURL, rotation] = useOrientation(squares);
-
   return (
-    <ColoredTile image={imageURL} rotate={rotation} gridColumn={gridColumn} gridRow={gridRow} />
+    <ColoredTile image={imageURL} rotate={rotation} gridColumn={column + 1} gridRow={row + 1} />
   );
 }
