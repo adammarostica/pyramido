@@ -1,4 +1,3 @@
-import PlacementButton from './PlacementButton';
 import styled from "styled-components";
 
 type BlankProps = {
@@ -6,35 +5,37 @@ type BlankProps = {
   activeDominoRotation: number,
   row: number,
   column: number,
-  validPlacements: string[],
-  setBoard: Function
+  status: string,
+  placeDomino: Function
 }
 
 
-const BlankGrid = styled.div<{gridColumn: number, gridRow: number}>`
+const BlankSquare = styled.div<{status: string, column: number, row: number}>`
   position: relative;
   outline: 1px solid #00000022;
-  grid-column: ${props => props.gridColumn} / span 1;
-  grid-row: ${props => props.gridRow} / span 1;
+  aspect-ratio: 1 / 1;
+  grid-column: ${props => props.column + 1} / span 1;
+  grid-row: ${props => props.row + 1} / span 1;
+  background-color: ${props => {
+    if (props.status === 'impossible') {
+      return 'slategrey';
+    } else if (props.status === 'possible') {
+      return 'lightgrey';
+    } else {
+      return 'white';  
+    }
+  }}
 `;
 
 
-export default function Blank({activeDomino, activeDominoRotation, row, column, validPlacements, setBoard}: BlankProps): JSX.Element {
+export default function Blank({activeDomino, activeDominoRotation, row, column, status, placeDomino}: BlankProps): JSX.Element {
 
-  const dominoIsHorizontal = activeDominoRotation === 0 || activeDominoRotation === 180;
-  const hasRightPlacement = validPlacements.includes('right');
-  const hasBottomPlacement = validPlacements.includes('bottom');
-  const shouldRenderButton = (dominoIsHorizontal && hasRightPlacement) || (!dominoIsHorizontal && hasBottomPlacement);
-
-  console.log(row, column, hasBottomPlacement && hasRightPlacement);
+  
+function handleClick() {
+  placeDomino([['o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o']], row, column, "right");
+}
   
   return (
-    <BlankGrid gridColumn={column + 1} gridRow={row + 1}>
-      {
-          shouldRenderButton
-            ? <PlacementButton activeDomino={activeDomino} activeDominoRotation={activeDominoRotation} setBoard={setBoard}/>
-            : null
-      }
-    </BlankGrid>
+    <BlankSquare status={status} column={column} row={row} data-column={column} data-row={row} onClick={handleClick}/>
   )
 }

@@ -7,7 +7,7 @@ interface TileProps {
   column: number,
 }
 
-const ColoredTile = styled.div<{ image: string, rotate: string, gridColumn: number, gridRow: number}>`
+const ColoredTile = styled.div<{ image: string, rotate: string, column: number, row: number}>`
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
@@ -16,14 +16,14 @@ const ColoredTile = styled.div<{ image: string, rotate: string, gridColumn: numb
       background-position: center;
       background-size: 100%;
       transform: rotate(${props.rotate});
-      grid-column: ${props.gridColumn} / span 1;
-      grid-row: ${props.gridRow} / span 1;`
+      grid-column: ${props.column + 1} / span 1;
+      grid-row: ${props.row + 1} / span 1;`
   }}
 `;
 
 export default function InteractiveTile({squares, row, column}: TileProps): JSX.Element {
   const [imageURL, rotation] = useOrientation(squares);
   return (
-    <ColoredTile image={imageURL} rotate={rotation} gridColumn={column + 1} gridRow={row + 1} />
+    <ColoredTile image={imageURL} rotate={rotation} column={column} row={row} />
   );
 }

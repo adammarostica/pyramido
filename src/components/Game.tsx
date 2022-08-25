@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const GameContainer = styled.div`
   margin: 20px auto;
-  width: min(90%, 600px);
+  width: min(90%, 1000px);
   height: auto;
 `
 
