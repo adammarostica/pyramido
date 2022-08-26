@@ -1,4 +1,4 @@
-type TileProps = {
+export type TileProps = {
   status: string;
   squares: string[];
 }

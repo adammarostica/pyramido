@@ -261,14 +261,16 @@ const tileOrientations: {[name: string]: Orientation} = {
   },
 }
 
-export default function useOrientation(tileString: string): [string, string] {
-
+export default function useOrientation(tileString: string | null): [string, string] {
+  
   const [imageURL, setImageURL] = useState<string>('none');
   const [rotation, setRotation] = useState<string>('none');
   
   useEffect(() => {
+    if (typeof tileString === 'string') {
       setImageURL(tileOrientations[tileString].img);
-      setRotation(tileOrientations[tileString].rotation);   
+      setRotation(tileOrientations[tileString].rotation);
+    }
   }, [tileString])
 
   return [imageURL, rotation];

@@ -60,7 +60,7 @@ type TileProps = {
 testBoard[4][4].status = 'orthogonal';
 testBoard[4][5].status = 'orthogonal';
 
-const BoardFoundation = styled.section<{ columns: number, rows: number}>`
+const BoardFoundation = styled.section<{ columns: number, rows: number }>`
   display: grid;
   grid-template-columns: repeat(
     ${(props) => props.columns},
@@ -188,6 +188,12 @@ export default function InteractiveBoard({
     setBoard(newBoard);
   }
 
+  // function handlePointerOver(e: any): void {
+  //   console.log(e.target);
+  // }
+  // function handlePointerLeave(e: any): void {
+  //   console.log(e.target);
+  // }
 
   return (
     <BoardFoundation columns={board[0].length} rows={board.length}>
@@ -205,6 +211,7 @@ export default function InteractiveBoard({
           } else {
             return (
               <Blank
+                board={board}
                 key={`${rowIndex}-${columnIndex}`}
                 activeDomino={activeDomino}
                 activeDominoRotation={activeDominoRotation}
