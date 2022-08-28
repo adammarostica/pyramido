@@ -179,7 +179,7 @@ export default function InteractiveBoard({
         break;
       case 'left':
         lowestNewColumn = column - 1;
-        secondTileColumn = column + 1;
+        secondTileColumn = column - 1;
         break;
     }
     newBoard[secondTileRow][secondTileColumn] = { status: 'taken', squares: domino[1] };

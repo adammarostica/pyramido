@@ -36,7 +36,7 @@ const Button = styled.div<{ activeDominoRotation: number }>`
   
 `;
 
-const TileImage = styled.img<{rotation: string}>`
+const TileImage = styled.img<{rotation: number}>`
   display: flex;
   width: 100%;
   height: auto;

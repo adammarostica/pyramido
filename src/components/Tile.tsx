@@ -9,7 +9,7 @@ interface TileProps {
   gridColumn: number
 }
 
-const ColoredTile = styled.div<{ image: string, rotate: string, gridColumn: number, gridRow: number }>`
+const ColoredTile = styled.div<{ image: string, rotate: number, gridColumn: number, gridRow: number }>`
   width: 100%;
   height: auto;
   ${ props => `background-image: url("./tiles/${props.image}");

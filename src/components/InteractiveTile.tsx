@@ -7,7 +7,7 @@ interface TileProps {
   column: number,
 }
 
-const ColoredTile = styled.div<{ image: string, rotate: string, column: number, row: number}>`
+const ColoredTile = styled.div<{ image: string, rotate: number, column: number, row: number}>`
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
@@ -15,7 +15,7 @@ const ColoredTile = styled.div<{ image: string, rotate: string, column: number, 
       background-repeat: no-repeat;
       background-position: center;
       background-size: 100%;
-      transform: rotate(${props.rotate});
+      transform: rotate(${props.rotate}deg);
       grid-column: ${props.column + 1} / span 1;
       grid-row: ${props.row + 1} / span 1;`
   }}
