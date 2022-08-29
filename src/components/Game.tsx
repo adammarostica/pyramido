@@ -12,7 +12,7 @@ const GameContainer = styled.div`
 export default function Game() {
 
   const [activeDomino, setActiveDomino] = useState([['tx', 't', 't', 't'], ['r', 'r', 'rx', 'r']]);
-  const [activeDominoRotation, setActiveDominoRotation] = useState(270);
+  const [activeDominoRotation, setActiveDominoRotation] = useState(0);
 
   return (
     <GameContainer>

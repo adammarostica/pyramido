@@ -155,6 +155,7 @@ export default function Blank({
   const [activePointer, setActivePointer] = useState(false);
   const [imageURL1, rotation1] = useOrientation(activeDomino[0].join('_'));
   const [imageURL2, rotation2] = useOrientation(activeDomino[1].join('_'));
+  const tileDirection = whereDoesThisPieceFit();
   
   function handlePointerEnter() {
     if (board[row][column].status === 'adjacent' || board[row][column].status === 'eligible') {
@@ -212,11 +213,13 @@ export default function Blank({
 
     return direction;
   }
+
   console.log(`
     activeDominoRotation: ${activeDominoRotation},
     rotation1: ${rotation1},
     rotation2: ${rotation2}
   `);
+  
   return (
     <>
       <BlankSquare
@@ -230,13 +233,13 @@ export default function Blank({
         onPointerLeave={handlePointerLeave}
       >
         {
-          activePointer && activeDominoRotation <= 90
-            ? <ImgTile rotation1={rotation1} rotation2={rotation2} direction={whereDoesThisPieceFit()}>
+          activePointer && tileDirection !== 'none' && activeDominoRotation <= 90
+            ? <ImgTile rotation1={rotation1} rotation2={rotation2} direction={tileDirection}>
                 <img className="one" src={`tiles/${imageURL1}`} alt="cool" />
                 <img className="two" src={`tiles/${imageURL2}`} alt="cool" />
              </ImgTile>
-            : activePointer && activeDominoRotation >=180
-            ? <ImgTile rotation1={rotation1+180} rotation2={rotation2+180} direction={whereDoesThisPieceFit()}>
+            : activePointer && tileDirection !== 'none' && activeDominoRotation >=180
+            ? <ImgTile rotation1={rotation1+180} rotation2={rotation2+180} direction={tileDirection}>
                 <img className="two" src={`tiles/${imageURL2}`} alt="cool" />
                 <img className="one" src={`tiles/${imageURL1}`} alt="cool" />
               </ImgTile>
