@@ -57,8 +57,8 @@ type TileProps = {
 //   ],
 // ];
 
-testBoard[4][4].status = 'orthogonal';
-testBoard[4][5].status = 'orthogonal';
+testBoard[4][4].status = 'adjacent';
+testBoard[4][5].status = 'adjacent';
 
 const BoardFoundation = styled.section<{ columns: number, rows: number }>`
   display: grid;
@@ -155,19 +155,27 @@ export default function InteractiveBoard({
     return board;
   }
 
-  function placeDomino(domino: string[][], row: number, column: number, direction: string): void {
+  function placeDomino(domino: string[][], dominoRotation: number, rotationOffset: number, row: number, column: number, direction: string): void {
     let newBoard = [...board];
-    newBoard[row][column] = { status: 'taken', squares: domino[0] };
     let lowestNewRow = row;
     let highestNewRow = row;
     let lowestNewColumn = column;
     let highestNewColumn = column;
     let secondTileRow = row;
+    let derivedRotation = dominoRotation + rotationOffset;
+    let derivedDomino: string[][] = [...domino];
+    while (derivedRotation > 0) {
+      derivedDomino[0] = [derivedDomino[0][3], derivedDomino[0][0], derivedDomino[0][1], derivedDomino[0][2]];
+      derivedDomino[1] = [derivedDomino[1][3], derivedDomino[1][0], derivedDomino[1][1], derivedDomino[1][2]];
+      derivedRotation -= 90;
+    }
+    
     let secondTileColumn = column;
     switch (direction) {
       case 'up':
         lowestNewRow = row - 1;
-        secondTileRow = row - 1;
+        secondTileRow = row;
+        row = row - 1;
         break;
       case 'right':
         highestNewColumn = column + 1;
@@ -179,10 +187,13 @@ export default function InteractiveBoard({
         break;
       case 'left':
         lowestNewColumn = column - 1;
-        secondTileColumn = column - 1;
+        secondTileColumn = column;
+        column = column - 1;
         break;
     }
-    newBoard[secondTileRow][secondTileColumn] = { status: 'taken', squares: domino[1] };
+
+    newBoard[row][column] = { status: 'taken', squares: derivedDomino[0] };
+    newBoard[secondTileRow][secondTileColumn] = { status: 'taken', squares: derivedDomino[1] };
     checkForNewHighsAndLows(lowestNewRow, highestNewRow, lowestNewColumn, highestNewColumn);
     newBoard = reclassifyBoard(newBoard);
     setBoard(newBoard);

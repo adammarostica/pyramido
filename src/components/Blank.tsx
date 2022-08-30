@@ -1,53 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 import useOrientation from "../hooks/useOrientation";
+import useTileDirection from "../hooks/useTileDirection";
 import { TileProps } from "../data/testBoard"
-
-const horizontalDominoDirectionPreference = [
-  {
-    direction: "right",
-    rowOffset: 0,
-    columnOffset: 1,
-  },
-  {
-    direction: "left",
-    rowOffset: 0,
-    columnOffset: -1,
-  },
-  {
-    direction: "down",
-    rowOffset: 1,
-    columnOffset: 0,
-  },
-  {
-    direction: "up",
-    rowOffset: -1,
-    columnOffset: 0,
-  },
-]
-
-const verticalDominoDirectionPreference = [
-  {
-    direction: "down",
-    rowOffset: 1,
-    columnOffset: 0,
-  },
-  {
-    direction: "up",
-    rowOffset: -1,
-    columnOffset: 0,
-  },
-  {
-    direction: "right",
-    rowOffset: 0,
-    columnOffset: 1,
-  },
-  {
-    direction: "left",
-    rowOffset: 0,
-    columnOffset: -1,
-  },
-]
 
 type BlankProps = {
   board: TileProps[][];
@@ -148,15 +103,16 @@ export default function Blank({
   status,
   placeDomino,
 }: BlankProps): JSX.Element {
-  function handleClick() {
-    placeDomino(activeDomino, row, column, "right");
-  }
-
+  
   const [activePointer, setActivePointer] = useState(false);
   const [imageURL1, rotation1] = useOrientation(activeDomino[0].join('_'));
   const [imageURL2, rotation2] = useOrientation(activeDomino[1].join('_'));
-  const tileDirection = whereDoesThisPieceFit();
-  
+  const [tileDirection, rotationOffset] = useTileDirection(board, row, column, activeDominoRotation)
+  console.log(activeDomino);
+  function handleClick() {
+    placeDomino(activeDomino, activeDominoRotation, rotationOffset, row, column, tileDirection);
+  }
+
   function handlePointerEnter() {
     if (board[row][column].status === 'adjacent' || board[row][column].status === 'eligible') {
       setActivePointer(true);
@@ -167,59 +123,12 @@ export default function Blank({
     setActivePointer(false);
   }
 
-  function getTileStatus(row: number, column: number) {
-    try {
-      return board[row][column].status;
-    } catch {
-      return 'error';
-    }
-  }
-  
-  function whereDoesThisPieceFit() {
-    const statusOfThisTile = getTileStatus(row, column);
-    let direction = 'none';
-    
-    if (statusOfThisTile === 'adjacent' && (activeDominoRotation === 0 || activeDominoRotation === 180)) {
-      horizontalDominoDirectionPreference.forEach((pref) => {
-        const statusOfTileInThisDirection = getTileStatus(row + pref.rowOffset, column + pref.columnOffset);
-        if (direction === 'none' && (statusOfTileInThisDirection === 'adjacent' || statusOfTileInThisDirection === 'eligible')) {
-          direction = pref.direction;
-        }
-      });
-    } else if (statusOfThisTile === 'eligible' && (activeDominoRotation === 0 || activeDominoRotation === 180)) {
-      horizontalDominoDirectionPreference.forEach((pref) => {
-        const statusOfTileInThisDirection = getTileStatus(row + pref.rowOffset, column + pref.columnOffset);
-        if (direction === 'none' && statusOfTileInThisDirection === 'adjacent') {
-          direction = pref.direction;
-        }
-      })
-    } else if (statusOfThisTile === 'adjacent' && (activeDominoRotation === 90 || activeDominoRotation === 270)) {
-      verticalDominoDirectionPreference.forEach((pref) => {
-        const statusOfTileInThisDirection = getTileStatus(row + pref.rowOffset, column + pref.columnOffset);
-        if (direction === 'none' && (statusOfTileInThisDirection === 'adjacent' || statusOfTileInThisDirection === 'eligible')) {
-          direction = pref.direction;
-        }
-      });
-    } else if (statusOfThisTile === 'eligible' && (activeDominoRotation === 90 || activeDominoRotation === 270)) {
-      verticalDominoDirectionPreference.forEach((pref) => {
-        const statusOfTileInThisDirection = getTileStatus(row + pref.rowOffset, column + pref.columnOffset);
-        if (direction === 'none' && statusOfTileInThisDirection === 'adjacent') {
-          direction = pref.direction;
-        }
-      });
-    } else {
-      return 'none'
-    }
-
-    return direction;
-  }
-
   console.log(`
     activeDominoRotation: ${activeDominoRotation},
     rotation1: ${rotation1},
     rotation2: ${rotation2}
   `);
-  
+
   return (
     <>
       <BlankSquare
